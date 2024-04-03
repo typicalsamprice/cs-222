@@ -14,7 +14,7 @@ protected:
 public:
   Person(string f, string l, int i) : first(f), last(l), id(i) {}
 
-  void print() {
+  virtual void print() {
     std::cout << first << " " << last << " [" << id << "]" << std::endl;
   }
 
@@ -34,11 +34,9 @@ public:
   string getFirst() const { return first; }
   string getLast() const { return last; }
   int getID() const { return id; }
-
-  virtual ~Person() = default;
 };
 
-class Student : public Person {
+class Student : virtual public Person {
 protected:
   string major;
   string minorOrMajor;
@@ -70,7 +68,7 @@ public:
   bool isDoubleMajor() const { return doubleMajor; }
   double getGPA() const { return gpa; }
 
-  void print() const {
+  void print() override {
     std::cout << getLast() << ", " << getFirst() << " (" << getID() << ") [ "
               << getMajor() << " Major / " << getAuxDegree();
     if (isDoubleMajor())
@@ -81,7 +79,7 @@ public:
   }
 };
 
-class Instructor : public Person {
+class Instructor : virtual public Person {
 protected:
   string department;
 
@@ -95,7 +93,7 @@ public:
   }
 
   string getDepartment() const { return department; }
-  void print() const {
+  void print() override {
     std::cout << "Prof. " << getLast() << " (" << getID() << ") [Dept. of "
               << getDepartment() << "]" << std::endl;
   }
@@ -125,12 +123,7 @@ int main() {
 
   for (int i = 0; i < 10; i++) {
     Person *p = people[i];
-    if (Instructor *i = dynamic_cast<Instructor *>(p))
-      i->print();
-    else if (Student *s = dynamic_cast<Student *>(p))
-      s->print();
-    else
-      p->print();
+    p->print();
   }
 
   double sum = 0;
